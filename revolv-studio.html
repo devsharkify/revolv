@@ -1,0 +1,2413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Revolv Studio — Phone photos → Complete listing in 10 minutes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #F6F8FB;
+    --bg-alt: #FFFFFF;
+    --bg-tint: #EEF3F9;
+    --ink: #0B1220;
+    --ink-body: #2A3342;
+    --ink-mute: #6B7280;
+    --line: #E4E9F0;
+    --line-strong: #D1D9E3;
+    --blue: #1E5AF5;
+    --blue-hi: #3972FF;
+    --blue-dim: #E8EFFE;
+    --orange: #FF6A1A;
+    --orange-hi: #FF8533;
+    --orange-dim: #FFEFE5;
+    --green: #10B981;
+    --green-dim: #DEFAF0;
+    --red: #EF4444;
+    --red-dim: #FEE2E2;
+    --yellow: #F59E0B;
+    --purple: #7C3AED;
+    --shadow-sm: 0 1px 2px rgba(11, 18, 32, 0.04);
+    --shadow-md: 0 4px 16px rgba(11, 18, 32, 0.06);
+    --shadow-lg: 0 20px 50px -10px rgba(11, 18, 32, 0.12);
+    --shadow-blue: 0 8px 24px -4px rgba(30, 90, 245, 0.3);
+    --shadow-orange: 0 8px 24px -4px rgba(255, 106, 26, 0.35);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--ink-body);
+    font-family: 'Plus Jakarta Sans', -apple-system, sans-serif;
+    font-weight: 400;
+    line-height: 1.55;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  input, textarea, select {
+    font-family: inherit;
+    background: var(--bg-alt);
+    border: 1.5px solid var(--line);
+    color: var(--ink);
+    padding: 10px 14px;
+    border-radius: 10px;
+    font-size: 14.5px;
+    outline: none;
+    transition: border-color 0.15s;
+    width: 100%;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--blue); }
+
+  /* ===== NAV ===== */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(246, 248, 251, 0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner {
+    max-width: 1280px; margin: 0 auto;
+    padding: 14px 24px;
+    display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 800; font-size: 19px; color: var(--ink); letter-spacing: -0.02em;
+    text-decoration: none;
+  }
+  .brand-logo {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: linear-gradient(135deg, var(--blue), var(--orange));
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-weight: 800; font-size: 15px;
+    box-shadow: var(--shadow-md);
+  }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; }
+  .api-indicator {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 10px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    cursor: pointer;
+  }
+  .api-indicator.ok { background: var(--green-dim); color: #047857; }
+  .api-indicator.no { background: var(--red-dim); color: #b91c1c; }
+  .api-indicator::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: currentColor;
+  }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font-family: inherit; font-weight: 600; font-size: 14.5px;
+    padding: 11px 20px; border-radius: 10px; cursor: pointer;
+    transition: all 0.2s; text-decoration: none; border: none;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--orange); color: white; box-shadow: var(--shadow-orange); }
+  .btn-primary:hover:not(:disabled) { background: var(--orange-hi); transform: translateY(-1px); }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+  .btn-blue { background: var(--blue); color: white; box-shadow: var(--shadow-blue); }
+  .btn-blue:hover:not(:disabled) { background: var(--blue-hi); transform: translateY(-1px); }
+  .btn-outline { background: var(--bg-alt); color: var(--ink); border: 1.5px solid var(--line-strong); }
+  .btn-outline:hover { border-color: var(--ink); }
+  .btn-ghost { background: transparent; color: var(--ink-body); border: none; padding: 8px 12px; }
+  .btn-ghost:hover { color: var(--blue); }
+  .btn-lg { padding: 15px 26px; font-size: 16px; border-radius: 12px; }
+  .btn-sm { padding: 7px 12px; font-size: 13px; border-radius: 8px; }
+
+  /* ===== HERO ===== */
+  .hero {
+    max-width: 1000px; margin: 0 auto;
+    padding: 60px 24px 40px;
+    text-align: center;
+  }
+  .hero h1 {
+    font-size: clamp(32px, 5vw, 56px); font-weight: 800;
+    line-height: 1.05; letter-spacing: -0.03em;
+    color: var(--ink); margin-bottom: 16px;
+  }
+  .hero h1 .h-blue { color: var(--blue); }
+  .hero h1 .h-orange { color: var(--orange); }
+  .hero-sub {
+    font-size: 17px; color: var(--ink-body);
+    max-width: 680px; margin: 0 auto;
+  }
+
+  /* ===== STAGE STEPS (top progress) ===== */
+  .stages {
+    max-width: 1100px; margin: 0 auto 32px;
+    padding: 0 24px;
+    display: grid; grid-template-columns: repeat(5, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .stage-link {
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    cursor: pointer; position: relative; z-index: 2;
+    text-decoration: none; color: inherit;
+    padding: 16px 8px;
+  }
+  .stage-dot {
+    width: 40px; height: 40px; border-radius: 50%;
+    background: var(--bg-alt); border: 2px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px;
+    color: var(--ink-mute);
+    transition: all 0.3s;
+  }
+  .stage-label {
+    font-size: 12px; font-weight: 600; color: var(--ink-mute);
+    text-align: center;
+  }
+  .stage-link.active .stage-dot {
+    background: var(--blue); color: white; border-color: var(--blue);
+    box-shadow: 0 0 0 6px rgba(30, 90, 245, 0.12);
+  }
+  .stage-link.active .stage-label { color: var(--blue); }
+  .stage-link.done .stage-dot {
+    background: var(--green); color: white; border-color: var(--green);
+  }
+  .stage-link.done .stage-dot::after {
+    content: '✓'; font-size: 16px;
+  }
+  .stage-link.done .stage-dot .stage-num { display: none; }
+  .stages::before {
+    content: ''; position: absolute;
+    top: 36px; left: 10%; right: 10%; height: 2px;
+    background: var(--line); z-index: 1;
+  }
+  @media (max-width: 700px) {
+    .stages { grid-template-columns: repeat(5, 1fr); padding: 0 8px; }
+    .stage-label { font-size: 10px; }
+    .stage-dot { width: 34px; height: 34px; font-size: 12px; }
+  }
+
+  /* ===== MAIN CONTAINER ===== */
+  .flow-container {
+    max-width: 1100px; margin: 0 auto;
+    padding: 0 24px 80px;
+  }
+
+  /* ===== STAGE CARDS ===== */
+  .stage-card {
+    background: var(--bg-alt);
+    border: 1.5px solid var(--line);
+    border-radius: 20px;
+    padding: 40px;
+    margin-bottom: 24px;
+    transition: all 0.3s;
+    position: relative;
+  }
+  .stage-card.locked {
+    opacity: 0.4; pointer-events: none;
+    filter: grayscale(0.4);
+  }
+  .stage-card.active {
+    border-color: var(--blue);
+    box-shadow: 0 0 0 4px rgba(30, 90, 245, 0.08), var(--shadow-lg);
+  }
+  .stage-card.done {
+    border-color: var(--green);
+  }
+  @media (max-width: 700px) {
+    .stage-card { padding: 24px; }
+  }
+
+  .stage-head {
+    display: flex; align-items: center; gap: 16px; margin-bottom: 24px;
+  }
+  .stage-badge {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--blue); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 18px;
+    flex-shrink: 0;
+  }
+  .stage-card.done .stage-badge { background: var(--green); }
+  .stage-card.done .stage-badge::before {
+    content: '✓'; font-size: 22px;
+  }
+  .stage-card.done .stage-badge .badge-num { display: none; }
+  .stage-head h2 {
+    font-size: 24px; font-weight: 700; color: var(--ink);
+    letter-spacing: -0.02em; line-height: 1.2;
+  }
+  .stage-head p {
+    font-size: 14px; color: var(--ink-mute); margin-top: 2px;
+  }
+
+  /* ===== STAGE 0: SETUP ===== */
+  .api-setup {
+    background: var(--bg-tint); padding: 16px 20px; border-radius: 12px;
+    margin-bottom: 20px;
+    display: flex; gap: 14px; align-items: center;
+    flex-wrap: wrap;
+  }
+  .api-setup label {
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .api-setup .help-link {
+    color: var(--blue); text-decoration: none; font-size: 13px; font-weight: 500;
+  }
+  .api-setup input { flex: 1; min-width: 200px; max-width: 380px; font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+
+  /* ===== DROPZONE ===== */
+  .dropzone {
+    border: 2.5px dashed var(--line-strong);
+    border-radius: 16px;
+    padding: 48px 24px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg);
+  }
+  .dropzone:hover, .dropzone.drag {
+    border-color: var(--blue); background: var(--blue-dim);
+  }
+  .dropzone-icon {
+    font-size: 40px; margin-bottom: 12px; opacity: 0.5;
+  }
+  .dropzone h3 {
+    font-size: 18px; font-weight: 700; color: var(--ink);
+    margin-bottom: 4px; letter-spacing: -0.01em;
+  }
+  .dropzone p { font-size: 13.5px; color: var(--ink-mute); }
+  .dropzone .or {
+    display: inline-block; margin-top: 12px;
+    color: var(--blue); font-weight: 600; text-decoration: underline;
+  }
+
+  /* ===== THUMBS GRID ===== */
+  .thumbs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px; margin-top: 20px;
+  }
+  .thumb {
+    aspect-ratio: 4/3; position: relative; overflow: hidden;
+    border: 1.5px solid var(--line); border-radius: 10px;
+    background: var(--bg-tint); cursor: pointer;
+  }
+  .thumb img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+  }
+  .thumb.processing { border-color: var(--blue); }
+  .thumb.processing::after {
+    content: ''; position: absolute; inset: 0;
+    background: rgba(30, 90, 245, 0.1);
+    backdrop-filter: blur(1px);
+  }
+  .thumb.done { border-color: var(--green); }
+  .thumb .status {
+    position: absolute; top: 4px; left: 4px;
+    font-family: 'JetBrains Mono', monospace; font-size: 9px;
+    padding: 2px 5px; background: rgba(0,0,0,0.7); color: white;
+    text-transform: uppercase; letter-spacing: 0.05em; font-weight: 600;
+    border-radius: 4px;
+  }
+  .thumb.done .status { background: var(--green); }
+  .thumb.error .status { background: var(--red); }
+  .thumb .rm {
+    position: absolute; top: 4px; right: 4px; width: 20px; height: 20px;
+    background: rgba(0,0,0,0.6); color: white; border: none; cursor: pointer;
+    border-radius: 50%; font-size: 12px; line-height: 1;
+    display: none;
+  }
+  .thumb:hover .rm { display: block; }
+  .thumb .mini-spinner {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 22px; height: 22px;
+    border: 2px solid rgba(255,255,255,0.5);
+    border-top-color: white; border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    z-index: 2;
+  }
+  @keyframes spin { to { transform: translate(-50%, -50%) rotate(360deg); } }
+
+  /* ===== SHARED PROGRESS BAR ===== */
+  .progress-wrap { margin: 20px 0; }
+  .progress-row {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .progress-row .label { color: var(--ink); font-weight: 600; }
+  .progress-row .count { color: var(--ink-mute); }
+  .progress-bar-bg {
+    height: 6px; background: var(--line); border-radius: 999px; overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blue), var(--orange));
+    border-radius: 999px;
+    transition: width 0.3s;
+  }
+
+  /* ===== STAGE ACTIONS ===== */
+  .stage-actions {
+    display: flex; gap: 10px; margin-top: 24px;
+    padding-top: 24px; border-top: 1px solid var(--line);
+    justify-content: flex-end; flex-wrap: wrap;
+  }
+
+  /* ===== STAGE 2: 360 VIEWER (Spinny-grade) ===== */
+  .viewer-stage {
+    aspect-ratio: 16/10;
+    background:
+      radial-gradient(ellipse at 50% 115%, rgba(255,255,255,0.08) 0%, transparent 45%),
+      linear-gradient(180deg, #f5f6f8 0%, #e9ecf0 55%, #d8dde4 75%, #b8c0cc 100%);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+    user-select: none;
+    cursor: grab;
+    max-width: 760px;
+    margin: 0 auto;
+    box-shadow:
+      0 24px 60px -20px rgba(11, 18, 32, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  }
+  .viewer-stage:active { cursor: grabbing; }
+  .viewer-stage.is-dragging { cursor: grabbing; }
+
+  /* Rotating ground disc behind the car */
+  .viewer-disc {
+    position: absolute;
+    left: 50%;
+    bottom: 8%;
+    width: 82%;
+    height: 18%;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background:
+      radial-gradient(ellipse at center,
+        rgba(11, 18, 32, 0.22) 0%,
+        rgba(11, 18, 32, 0.10) 35%,
+        rgba(11, 18, 32, 0.03) 65%,
+        transparent 80%);
+    pointer-events: none;
+    z-index: 1;
+    transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+  }
+  .viewer-disc::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px dashed rgba(11, 18, 32, 0.08);
+    pointer-events: none;
+  }
+
+  /* The image canvas */
+  .viewer-canvas {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+  }
+  .viewer-canvas img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    pointer-events: none;
+    -webkit-user-drag: none;
+    /* Subtle drop shadow makes the car feel like it's on the disc */
+    filter: drop-shadow(0 6px 14px rgba(11, 18, 32, 0.2));
+    /* Crossfade between frames for smoother drag */
+    transition: opacity 0.06s linear;
+  }
+
+  /* Hotspots overlaid on the car */
+  .viewer-hotspots {
+    position: absolute;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .viewer-hotspots.hidden-hotspots .vhotspot { opacity: 0; pointer-events: none; }
+  .vhotspot {
+    position: absolute;
+    width: 24px; height: 24px;
+    background: var(--orange);
+    color: white;
+    border: 2px solid white;
+    border-radius: 50%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 2px 10px rgba(255, 106, 26, 0.6);
+    pointer-events: auto;
+    cursor: pointer;
+    opacity: 1;
+    transition: opacity 0.25s ease;
+  }
+  .vhotspot::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    background: var(--orange);
+    border-radius: 50%;
+    opacity: 0.4;
+    animation: ring 1.8s ease-out infinite;
+    z-index: -1;
+  }
+
+  /* Top HUD — tabs + frame badge */
+  .viewer-top {
+    position: absolute;
+    top: 14px; left: 14px; right: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 6;
+  }
+  .viewer-tabs {
+    display: inline-flex;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(11, 18, 32, 0.06);
+    border-radius: 10px;
+    padding: 4px;
+    gap: 2px;
+  }
+  .viewer-tab {
+    border: 0;
+    background: transparent;
+    padding: 6px 12px;
+    border-radius: 7px;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink-mute);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .viewer-tab:hover { color: var(--ink); }
+  .viewer-tab.active {
+    background: var(--ink);
+    color: white;
+  }
+  .viewer-badge {
+    background: rgba(11, 18, 32, 0.78);
+    backdrop-filter: blur(10px);
+    color: white;
+    padding: 6px 11px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+
+  /* Bottom HUD — hotspot toggle + play */
+  .viewer-bottom {
+    position: absolute;
+    bottom: 14px; left: 14px; right: 14px;
+    display: flex; justify-content: space-between; align-items: center;
+    z-index: 6;
+  }
+  .viewer-toggle {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255, 255, 255, 0.85);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(11, 18, 32, 0.06);
+    border-radius: 999px;
+    padding: 5px 8px 5px 12px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .viewer-toggle:hover { background: rgba(255, 255, 255, 0.95); }
+  .viewer-toggle .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--orange);
+    box-shadow: 0 0 0 3px rgba(255, 106, 26, 0.18);
+  }
+  .viewer-toggle .switch {
+    position: relative;
+    width: 30px; height: 18px;
+    border-radius: 999px;
+    background: #D1D9E3;
+    transition: background 0.2s;
+  }
+  .viewer-toggle .switch .knob {
+    position: absolute;
+    top: 2px; left: 2px;
+    width: 14px; height: 14px;
+    background: white;
+    border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(11, 18, 32, 0.2);
+    transition: transform 0.2s;
+  }
+  .viewer-toggle .switch.on {
+    background: var(--orange);
+  }
+  .viewer-toggle .switch.on .knob {
+    transform: translateX(12px);
+  }
+
+  .viewer-ctrl {
+    background: rgba(11, 18, 32, 0.82);
+    backdrop-filter: blur(10px);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 7px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    transition: all 0.15s;
+  }
+  .viewer-ctrl:hover { background: rgba(11, 18, 32, 0.95); }
+  .viewer-ctrl.active {
+    background: var(--orange);
+    border-color: var(--orange);
+  }
+
+  /* Gallery grid inside viewer (when Gallery tab selected) */
+  .viewer-gallery {
+    position: absolute; inset: 0;
+    z-index: 5; /* below HUD tabs (z:6) so Exterior tab stays clickable */
+    background: rgba(245, 246, 248, 0.98);
+    backdrop-filter: blur(8px);
+    overflow-y: auto;
+    padding: 56px 16px 56px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 10px;
+  }
+  .viewer-gallery-item {
+    aspect-ratio: 4/3;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1.5px solid var(--line);
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    position: relative;
+  }
+  .viewer-gallery-item:hover {
+    border-color: var(--blue);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  .viewer-gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .viewer-gallery-item .gal-num {
+    position: absolute;
+    top: 6px; left: 6px;
+    background: rgba(11, 18, 32, 0.8);
+    color: white;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .viewer-top, .viewer-bottom { left: 10px; right: 10px; }
+    .viewer-tabs { padding: 3px; }
+    .viewer-tab { padding: 5px 9px; font-size: 11px; }
+    .viewer-toggle { padding: 4px 6px 4px 10px; font-size: 11.5px; }
+    .viewer-ctrl { padding: 6px 11px; font-size: 11.5px; }
+  }
+
+  /* ===== STAGE 3: HOTSPOTS ===== */
+  .honesty-stage {
+    aspect-ratio: 4/3;
+    background: var(--bg-tint); border-radius: 12px; overflow: hidden;
+    position: relative; cursor: crosshair;
+    max-width: 640px; margin: 0 auto;
+  }
+  .honesty-stage img {
+    width: 100%; height: 100%; object-fit: contain; pointer-events: none;
+  }
+  .hotspot {
+    position: absolute; width: 26px; height: 26px;
+    background: var(--orange); color: white;
+    border: 2px solid white; border-radius: 50%;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 10px rgba(255, 106, 26, 0.6);
+    transform: translate(-50%, -50%);
+    cursor: pointer; z-index: 3;
+  }
+  .hotspot::before {
+    content: ''; position: absolute; inset: -4px;
+    background: var(--orange); border-radius: 50%; opacity: 0.4;
+    animation: ring 1.8s ease-out infinite; z-index: -1;
+  }
+  @keyframes ring { 0%{transform:scale(1);opacity:0.5}100%{transform:scale(2.2);opacity:0} }
+
+  .annotations {
+    margin-top: 20px; display: flex; flex-direction: column; gap: 10px;
+  }
+  .ann-row {
+    display: flex; gap: 14px; align-items: flex-start;
+    padding: 14px; background: var(--bg-tint); border-radius: 10px;
+    border: 1px solid var(--line);
+  }
+  .ann-num {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--orange); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px;
+    flex-shrink: 0;
+  }
+  .ann-body { flex: 1; display: grid; grid-template-columns: 1fr 140px; gap: 8px; }
+  .ann-title-row { display: flex; flex-direction: column; gap: 6px; }
+  .ann-title-input {
+    font-weight: 600; font-size: 14px; padding: 6px 10px;
+  }
+  .ann-desc { font-size: 13px; padding: 6px 10px; }
+  .ann-sev select { font-size: 12px; padding: 6px 10px; }
+  .ann-del {
+    background: transparent; border: none; color: var(--red); cursor: pointer;
+    font-size: 12px; font-weight: 600; padding: 4px; align-self: start;
+  }
+  @media (max-width: 600px) {
+    .ann-body { grid-template-columns: 1fr; }
+  }
+
+  /* ===== STAGE 4: CAR DETAILS FORM ===== */
+  .form-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 700px) { .form-grid { grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 500px) { .form-grid { grid-template-columns: 1fr; } }
+  .form-field label {
+    font-size: 12px; font-weight: 600; color: var(--ink);
+    text-transform: uppercase; letter-spacing: 0.05em;
+    display: block; margin-bottom: 6px;
+  }
+
+  /* ===== STAGE 5: GENERATED LISTING ===== */
+  .listing-output { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 900px) { .listing-output { grid-template-columns: 1fr; } }
+  .lang-tabs {
+    display: flex; gap: 4px; margin-bottom: 16px;
+    padding: 4px; background: var(--bg-tint); border-radius: 10px; width: fit-content;
+  }
+  .lang-tab {
+    padding: 8px 16px; border-radius: 7px; cursor: pointer;
+    font-family: 'JetBrains Mono', monospace; font-size: 12px;
+    font-weight: 600; color: var(--ink-mute);
+    background: transparent; border: none;
+    transition: all 0.15s;
+  }
+  .lang-tab.active {
+    background: var(--bg-alt); color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+  .output-block {
+    background: var(--bg-tint); border-radius: 12px; padding: 18px;
+    margin-bottom: 14px;
+  }
+  .output-block .block-head {
+    display: flex; justify-content: space-between; align-items: center;
+    margin-bottom: 8px;
+  }
+  .output-block .block-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    text-transform: uppercase; letter-spacing: 0.12em;
+    color: var(--blue); font-weight: 600;
+  }
+  .output-block .copy-btn {
+    background: transparent; border: none; color: var(--ink-mute);
+    cursor: pointer; font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    text-transform: uppercase; letter-spacing: 0.1em; font-weight: 600;
+    padding: 4px 8px;
+  }
+  .output-block .copy-btn:hover { color: var(--blue); }
+  .output-block .copy-btn.copied { color: var(--green); }
+  .output-block .block-content {
+    font-size: 14.5px; color: var(--ink-body);
+    line-height: 1.55; white-space: pre-wrap;
+  }
+  .output-block .block-title {
+    font-size: 18px; font-weight: 700; color: var(--ink);
+    line-height: 1.3; letter-spacing: -0.02em;
+  }
+  .highlights-list { list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .highlights-list li {
+    font-size: 14px; color: var(--ink-body);
+    display: flex; gap: 8px;
+  }
+  .highlights-list li::before { content: '→'; color: var(--orange); font-weight: 700; }
+
+  .wa-block {
+    background: #e7f8ee; border: 1px solid #a7e9c3; border-radius: 12px; padding: 18px;
+    margin-bottom: 14px;
+  }
+  .wa-block .block-label { color: #047857; }
+
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tag {
+    display: inline-block; padding: 4px 10px; border-radius: 6px;
+    background: var(--bg-alt); border: 1px solid var(--line);
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--ink-body);
+  }
+
+  /* ===== FINAL LISTING MOCK ===== */
+  .listing-mock {
+    background: var(--bg-alt); border: 1px solid var(--line);
+    border-radius: 16px; overflow: hidden;
+  }
+  .listing-mock-photo {
+    position: relative; aspect-ratio: 4/3;
+    background: var(--bg-tint); overflow: hidden;
+  }
+  .listing-mock-photo img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
+  .listing-mock-photo .listing-360 {
+    position: absolute; top: 12px; right: 12px;
+    background: var(--ink); color: white;
+    padding: 5px 10px; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: 10px;
+    display: flex; align-items: center; gap: 5px; font-weight: 500;
+  }
+  .listing-mock-photo .listing-360::before {
+    content: ''; width: 5px; height: 5px;
+    background: var(--orange); border-radius: 50%;
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  @keyframes pulse { 0%,100%{opacity:1}50%{opacity:0.3} }
+  .listing-mock-info { padding: 18px; }
+  .listing-mock-title { font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .listing-mock-specs { font-size: 12px; color: var(--ink-mute); margin-bottom: 12px; }
+  .listing-mock-bottom {
+    padding-top: 12px; border-top: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .listing-mock-price { font-size: 18px; font-weight: 800; color: var(--ink); }
+  .listing-mock-grade {
+    background: var(--green-dim); color: #047857;
+    padding: 3px 8px; border-radius: 5px; font-size: 11px; font-weight: 700;
+  }
+
+  /* ===== EXPORT AREA ===== */
+  .export-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 12px; margin-top: 20px;
+  }
+  @media (max-width: 700px) { .export-grid { grid-template-columns: 1fr; } }
+  .export-tile {
+    padding: 20px; background: var(--bg-tint); border-radius: 12px;
+    text-align: center; transition: all 0.15s;
+    cursor: pointer; border: 1.5px solid transparent;
+  }
+  .export-tile:hover { border-color: var(--blue); background: var(--blue-dim); }
+  .export-tile-icon { font-size: 28px; margin-bottom: 8px; }
+  .export-tile h4 { font-size: 14px; font-weight: 700; color: var(--ink); margin-bottom: 4px; }
+  .export-tile p { font-size: 12px; color: var(--ink-mute); }
+
+  /* ===== LOADERS ===== */
+  .stage-working {
+    text-align: center; padding: 40px 20px;
+  }
+  .big-spinner {
+    width: 48px; height: 48px;
+    border: 3px solid var(--line); border-top-color: var(--blue);
+    border-radius: 50%; margin: 0 auto 16px;
+    animation: spin 0.9s linear infinite;
+  }
+  .stage-working .phase {
+    font-weight: 600; color: var(--ink); font-size: 15px; margin-bottom: 4px;
+  }
+  .stage-working .phase-sub {
+    font-size: 13px; color: var(--ink-mute);
+  }
+
+  /* ===== ALERTS ===== */
+  .alert {
+    padding: 12px 16px; border-radius: 10px;
+    font-size: 13.5px; display: flex; gap: 10px; align-items: flex-start;
+    margin-bottom: 16px;
+  }
+  .alert.warn { background: #fff7e6; border: 1px solid #fcd47a; color: #7a4a00; }
+  .alert.info { background: var(--blue-dim); border: 1px solid #aac5f9; color: #1e3a8a; }
+  .alert.error { background: var(--red-dim); border: 1px solid #fecaca; color: #991b1b; }
+  .alert strong { display: block; margin-bottom: 2px; }
+
+  /* ===== MODAL ===== */
+  .modal-backdrop {
+    position: fixed; inset: 0; background: rgba(11, 18, 32, 0.6);
+    backdrop-filter: blur(6px); z-index: 200;
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+  }
+  .modal-backdrop.open { display: flex; }
+  .modal {
+    background: var(--bg-alt); border-radius: 20px;
+    padding: 32px; max-width: 520px; width: 100%;
+    max-height: 85vh; overflow-y: auto;
+  }
+  .modal h3 { font-size: 22px; font-weight: 700; margin-bottom: 12px; letter-spacing: -0.02em; }
+  .modal p { font-size: 14.5px; color: var(--ink-body); margin-bottom: 16px; }
+
+  /* ===== FADE IN ===== */
+  .fadein { animation: fadeUp 0.6s cubic-bezier(0.2,0.8,0.2,1) backwards; }
+  @keyframes fadeUp { from {opacity:0; transform:translateY(10px);} to {opacity:1; transform:translateY(0);} }
+
+  /* Hidden helper */
+  .hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<!-- ========== NAV ========== -->
+<nav>
+  <div class="nav-inner">
+    <a href="revolv-portal.html" class="brand">
+      <div class="brand-logo">R</div>
+      Revolv Studio
+    </a>
+    <div class="nav-right">
+      <div id="api-pill" class="api-indicator no" onclick="openApiModal()">
+        API not set
+      </div>
+      <a href="revolv-portal.html" class="btn-ghost btn" style="font-size: 13px;">← Back to home</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ========== HERO ========== -->
+<section class="hero">
+  <h1>Phone photos → <span class="h-blue">complete listing</span> in <span class="h-orange">10 minutes</span>.</h1>
+  <p class="hero-sub">Upload 8–32 photos of the car. We'll enhance every photo, build a 360° spinning view, detect every flaw, and write your listing in English, Hindi, and Arabic — all in one flow.</p>
+</section>
+
+<!-- ========== STAGE INDICATOR ========== -->
+<div class="stages">
+  <a href="#stage-0" class="stage-link" id="stage-indicator-0">
+    <div class="stage-dot"><span class="stage-num">1</span></div>
+    <div class="stage-label">Upload</div>
+  </a>
+  <a href="#stage-1" class="stage-link" id="stage-indicator-1">
+    <div class="stage-dot"><span class="stage-num">2</span></div>
+    <div class="stage-label">Enhance</div>
+  </a>
+  <a href="#stage-2" class="stage-link" id="stage-indicator-2">
+    <div class="stage-dot"><span class="stage-num">3</span></div>
+    <div class="stage-label">360° View</div>
+  </a>
+  <a href="#stage-3" class="stage-link" id="stage-indicator-3">
+    <div class="stage-dot"><span class="stage-num">4</span></div>
+    <div class="stage-label">Flaws</div>
+  </a>
+  <a href="#stage-4" class="stage-link" id="stage-indicator-4">
+    <div class="stage-dot"><span class="stage-num">5</span></div>
+    <div class="stage-label">Listing</div>
+  </a>
+</div>
+
+<!-- ========== MAIN FLOW ========== -->
+<div class="flow-container">
+
+  <!-- STAGE 0: UPLOAD -->
+  <div class="stage-card active" id="stage-0">
+    <div class="stage-head">
+      <div class="stage-badge"><span class="badge-num">1</span></div>
+      <div>
+        <h2>Upload your car photos</h2>
+        <p>Walk around the car taking 8–32 photos at even angles. Works on any phone.</p>
+      </div>
+    </div>
+
+    <div id="api-notice" class="alert info hidden">
+      <div>
+        <strong>API key needed for photo enhancement</strong>
+        Without a Photoroom key, photos go through as-is. Click "API not set" in the top nav to add your free key (50 photos/month free).
+      </div>
+    </div>
+
+    <div id="dropzone" class="dropzone">
+      <div class="dropzone-icon">📸</div>
+      <h3>Drop photos here</h3>
+      <p>JPG or PNG · 8–32 photos recommended for best 360° · <span class="or">or click to browse</span></p>
+      <input id="file-input" type="file" accept="image/*" multiple class="hidden" />
+    </div>
+
+    <div id="thumbs-container" class="hidden">
+      <div class="thumbs-grid" id="thumbs-grid"></div>
+      <div class="stage-actions">
+        <button class="btn btn-ghost" id="btn-clear">Clear all</button>
+        <button class="btn btn-outline" id="btn-add-more">+ Add more</button>
+        <button class="btn btn-primary" id="btn-start-flow">Start processing →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 1: ENHANCE -->
+  <div class="stage-card locked" id="stage-1">
+    <div class="stage-head">
+      <div class="stage-badge"><span class="badge-num">2</span></div>
+      <div>
+        <h2>Enhance to showroom quality</h2>
+        <p>Removes backgrounds, adds studio backdrop, realistic shadows, enhanced lighting.</p>
+      </div>
+    </div>
+
+    <div id="enhance-working" class="stage-working hidden">
+      <div class="big-spinner"></div>
+      <div class="phase" id="enhance-phase">Preparing photos...</div>
+      <div class="phase-sub" id="enhance-sub">This takes about 20 seconds per photo</div>
+      <div class="progress-wrap" style="max-width: 400px; margin: 20px auto 0;">
+        <div class="progress-row">
+          <span class="label" id="enhance-label">Photo 0 / 0</span>
+          <span class="count" id="enhance-count">0%</span>
+        </div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="enhance-bar" style="width: 0%"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="enhance-preview" class="hidden">
+      <div class="thumbs-grid" id="enhance-grid"></div>
+      <div class="stage-actions">
+        <button class="btn btn-outline" id="btn-skip-enhance">Skip enhancement</button>
+        <button class="btn btn-primary" id="btn-continue-to-viewer">Continue to 360° →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 2: 360 VIEWER -->
+  <div class="stage-card locked" id="stage-2">
+    <div class="stage-head">
+      <div class="stage-badge"><span class="badge-num">3</span></div>
+      <div>
+        <h2>Your spinning 360° showroom</h2>
+        <p>Drag to rotate. Buyers see exactly this — no login, no download.</p>
+      </div>
+    </div>
+
+    <div id="viewer-content" class="hidden">
+      <div id="viewer-frame-warning" class="alert warn hidden" style="margin-bottom: 16px;">
+        <div>
+          <strong>Smooth rotation needs more frames</strong>
+          <span id="viewer-frame-warning-text">You've uploaded few photos. For a Spinny-grade spin, shoot 24-32 photos walking around the car.</span>
+        </div>
+      </div>
+
+      <div class="viewer-stage" id="viewer-stage">
+        <!-- Rotating disc -->
+        <div class="viewer-disc" id="viewer-disc"></div>
+        <!-- The frame image -->
+        <div class="viewer-canvas">
+          <img id="viewer-img" src="" alt="" draggable="false" />
+        </div>
+        <!-- Hotspot overlay (copied from Stage 3 annotations after detection) -->
+        <div class="viewer-hotspots" id="viewer-hotspots"></div>
+
+        <!-- HUD -->
+        <div class="viewer-top">
+          <div class="viewer-tabs">
+            <button class="viewer-tab active" data-vtab="ext">Exterior</button>
+            <button class="viewer-tab" data-vtab="gal">Gallery</button>
+          </div>
+          <div class="viewer-badge" id="viewer-frame-badge">Frame 1 / 1</div>
+        </div>
+        <div class="viewer-bottom">
+          <button class="viewer-toggle" id="viewer-hotspots-toggle">
+            <span class="dot"></span>
+            <span>Hotspots</span>
+            <span class="switch on"><span class="knob"></span></span>
+          </button>
+          <button class="viewer-ctrl" id="viewer-play">▶ Auto-rotate</button>
+        </div>
+
+        <!-- Gallery view (initially hidden) -->
+        <div class="viewer-gallery hidden" id="viewer-gallery"></div>
+      </div>
+
+      <!-- Frame preload progress (shown briefly on first entry) -->
+      <div id="viewer-preload" class="hidden" style="margin-top: 14px; display: flex; align-items: center; gap: 12px; justify-content: center;">
+        <div style="width: 16px; height: 16px; border: 2px solid var(--line); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.8s linear infinite;"></div>
+        <span class="mono" style="font-size: 12px; color: var(--ink-mute);" id="viewer-preload-text">Loading frames…</span>
+      </div>
+
+      <div class="stage-actions">
+        <button class="btn btn-primary" id="btn-continue-to-flaws">Continue to flaw check →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 3: HONESTY / FLAWS -->
+  <div class="stage-card locked" id="stage-3">
+    <div class="stage-head">
+      <div class="stage-badge"><span class="badge-num">4</span></div>
+      <div>
+        <h2>Every flaw, on the record</h2>
+        <p>Claude Vision scans your best photo for scratches and dents. Review, edit, approve.</p>
+      </div>
+    </div>
+
+    <div id="flaw-working" class="stage-working hidden">
+      <div class="big-spinner"></div>
+      <div class="phase">Claude is scanning for damage...</div>
+      <div class="phase-sub">Looking for scratches, dents, chips, wear</div>
+    </div>
+
+    <div id="flaw-content" class="hidden">
+      <div class="honesty-stage" id="honesty-stage">
+        <img id="honesty-img" src="" alt="" draggable="false" />
+        <!-- hotspots injected here -->
+      </div>
+      <p style="font-size: 13px; color: var(--ink-mute); text-align: center; margin-top: 10px;">
+        Click anywhere on the car to add more flaws manually
+      </p>
+      <div class="annotations" id="annotations-list"></div>
+      <div class="stage-actions">
+        <button class="btn btn-outline" id="btn-rescan">↻ Rescan</button>
+        <button class="btn btn-primary" id="btn-continue-to-listing">Continue to listing →</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- STAGE 4: CAR DETAILS + AI LISTING -->
+  <div class="stage-card locked" id="stage-4">
+    <div class="stage-head">
+      <div class="stage-badge"><span class="badge-num">5</span></div>
+      <div>
+        <h2>Write the listing</h2>
+        <p>Enter basic details. Claude writes your listing in English, Hindi, and Arabic.</p>
+      </div>
+    </div>
+
+    <div id="car-form" class="hidden">
+      <div class="form-grid">
+        <div class="form-field">
+          <label>Make</label>
+          <input id="fld-make" placeholder="Toyota" value="Toyota" />
+        </div>
+        <div class="form-field">
+          <label>Model</label>
+          <input id="fld-model" placeholder="Land Cruiser VX.R" value="Land Cruiser VX.R" />
+        </div>
+        <div class="form-field">
+          <label>Year</label>
+          <input id="fld-year" type="number" value="2019" />
+        </div>
+        <div class="form-field">
+          <label>Kilometers</label>
+          <input id="fld-km" type="number" value="68420" />
+        </div>
+        <div class="form-field">
+          <label>Fuel</label>
+          <select id="fld-fuel">
+            <option>Petrol</option><option>Diesel</option><option>Hybrid</option><option>Electric</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Transmission</label>
+          <select id="fld-trans">
+            <option>Automatic</option><option>Manual</option>
+          </select>
+        </div>
+        <div class="form-field">
+          <label>Price</label>
+          <div style="display: flex; gap: 6px;">
+            <select id="fld-currency" style="width: 80px;">
+              <option>AED</option><option>INR</option><option>USD</option>
+            </select>
+            <input id="fld-price" type="number" value="150000" />
+          </div>
+        </div>
+        <div class="form-field">
+          <label>Location</label>
+          <input id="fld-location" value="Dubai, UAE" />
+        </div>
+        <div class="form-field">
+          <label>Target buyer</label>
+          <select id="fld-target">
+            <option value="export">Export buyer</option>
+            <option value="local">Local buyer</option>
+            <option value="india">India buyer</option>
+            <option value="family">Family buyer</option>
+          </select>
+        </div>
+      </div>
+      <div class="stage-actions">
+        <button class="btn btn-primary btn-lg" id="btn-generate-listing">✦ Generate listing in 3 languages</button>
+      </div>
+    </div>
+
+    <div id="listing-working" class="stage-working hidden">
+      <div class="big-spinner"></div>
+      <div class="phase">Claude is writing your listing...</div>
+      <div class="phase-sub">English, Hindi, and Arabic — in parallel</div>
+    </div>
+
+    <div id="listing-output" class="hidden">
+      <div class="lang-tabs">
+        <button class="lang-tab active" data-lang="en">English</button>
+        <button class="lang-tab" data-lang="hi">हिंदी</button>
+        <button class="lang-tab" data-lang="ar">عربي</button>
+      </div>
+
+      <div class="listing-output">
+        <!-- LEFT: generated text -->
+        <div>
+          <div class="output-block">
+            <div class="block-head">
+              <span class="block-label">Listing title</span>
+              <button class="copy-btn" data-copy="title">Copy</button>
+            </div>
+            <div class="block-content block-title" id="out-title"></div>
+          </div>
+
+          <div class="output-block">
+            <div class="block-head">
+              <span class="block-label">Description</span>
+              <button class="copy-btn" data-copy="description">Copy</button>
+            </div>
+            <div class="block-content" id="out-description"></div>
+          </div>
+
+          <div class="output-block">
+            <div class="block-head">
+              <span class="block-label">Key highlights</span>
+              <button class="copy-btn" data-copy="highlights">Copy</button>
+            </div>
+            <ul class="highlights-list" id="out-highlights"></ul>
+          </div>
+
+          <div class="wa-block">
+            <div class="block-head">
+              <span class="block-label">WhatsApp pitch — ready to send</span>
+              <button class="copy-btn" data-copy="whatsapp">Copy</button>
+            </div>
+            <div class="block-content" id="out-whatsapp"></div>
+          </div>
+
+          <div class="output-block">
+            <div class="block-head">
+              <span class="block-label">SEO tags</span>
+              <button class="copy-btn" data-copy="tags">Copy all</button>
+            </div>
+            <div class="tags" id="out-tags"></div>
+          </div>
+        </div>
+
+        <!-- RIGHT: final listing mock -->
+        <div>
+          <div style="position: sticky; top: 90px;">
+            <div class="listing-mock">
+              <div class="listing-mock-photo">
+                <img id="final-photo" src="" alt="" />
+                <div class="listing-360">360° Live</div>
+              </div>
+              <div class="listing-mock-info">
+                <div class="listing-mock-title" id="final-title">—</div>
+                <div class="listing-mock-specs" id="final-specs">—</div>
+                <div class="listing-mock-bottom">
+                  <div class="listing-mock-price" id="final-price">—</div>
+                  <div class="listing-mock-grade" id="final-grade">A Grade</div>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: 16px; font-size: 13px; color: var(--ink-mute); text-align: center;">
+              ↑ Final listing preview · <span id="final-count">0</span> photos, <span id="final-flaws">0</span> flaws disclosed
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EXPORT -->
+      <div style="margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line);">
+        <h3 style="font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 14px;">Share your listing</h3>
+        <div class="export-grid">
+          <div class="export-tile" id="btn-export-html">
+            <div class="export-tile-icon">🔗</div>
+            <h4>Download shareable page</h4>
+            <p>One HTML file — email, WhatsApp, host anywhere</p>
+          </div>
+          <div class="export-tile" id="btn-export-wa">
+            <div class="export-tile-icon">💬</div>
+            <h4>Copy WhatsApp message</h4>
+            <p>Copies the sales pitch in the active language</p>
+          </div>
+          <div class="export-tile" id="btn-start-over">
+            <div class="export-tile-icon">🔄</div>
+            <h4>Start a new car</h4>
+            <p>Clear everything and list the next car</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== API SETUP MODAL ========== -->
+<div id="api-modal" class="modal-backdrop">
+  <div class="modal">
+    <h3>Add your Photoroom API key</h3>
+    <p>Photo enhancement is powered by Photoroom — commercial-grade background removal. <strong>50 photos per month are free.</strong> Sign up at <a href="https://www.photoroom.com/api" target="_blank" style="color: var(--blue);">photoroom.com/api</a>, copy the sandbox or production key, paste below.</p>
+    <div class="alert info">
+      <div>Your key lives only in your browser (localStorage). Never sent anywhere except Photoroom itself.</div>
+    </div>
+    <input id="api-key-input" type="password" placeholder="sandbox_xxx or production_xxx" class="mono" style="margin-bottom: 12px;" />
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <button class="btn btn-primary" id="btn-save-key">Save key</button>
+      <button class="btn btn-outline" id="btn-clear-key">Clear key</button>
+      <button class="btn btn-ghost" onclick="closeApiModal()">Skip for now</button>
+    </div>
+    <p style="font-size: 12px; color: var(--ink-mute); margin-top: 14px; margin-bottom: 0;">
+      Without a key, photos flow through as-is (no background cleanup). You can still get 360°, flaw detection, and AI listing.
+    </p>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script>
+// ============ STATE ============
+const state = {
+  files: [],           // [{ id, file, src, enhancedUrl, status }]
+  bestPhotoIdx: 0,     // which photo to use for flaw detection & listing mock
+  annotations: [],     // [{ id, xPct, yPct, title, severity, description }]
+  carDetails: {},
+  generated: { en: null, hi: null, ar: null },
+  currentLang: 'en',
+  apiKey: null,
+  currentStage: 0,
+};
+
+// ============ API KEY ============
+const KEY_STORAGE = 'revolv_photoroom_key';
+
+function loadApiKey() {
+  state.apiKey = localStorage.getItem(KEY_STORAGE);
+  updateApiUi();
+}
+function updateApiUi() {
+  const pill = document.getElementById('api-pill');
+  const notice = document.getElementById('api-notice');
+  if (state.apiKey) {
+    pill.className = 'api-indicator ok';
+    pill.textContent = 'Photoroom connected';
+    notice.classList.add('hidden');
+  } else {
+    pill.className = 'api-indicator no';
+    pill.textContent = 'API not set';
+    notice.classList.remove('hidden');
+  }
+}
+function openApiModal() {
+  if (state.apiKey) document.getElementById('api-key-input').value = state.apiKey;
+  document.getElementById('api-modal').classList.add('open');
+}
+function closeApiModal() { document.getElementById('api-modal').classList.remove('open'); }
+document.getElementById('api-modal').addEventListener('click', e => { if (e.target.id === 'api-modal') closeApiModal(); });
+document.getElementById('btn-save-key').addEventListener('click', () => {
+  const v = document.getElementById('api-key-input').value.trim();
+  if (v) {
+    localStorage.setItem(KEY_STORAGE, v);
+    state.apiKey = v;
+    updateApiUi();
+    closeApiModal();
+  }
+});
+document.getElementById('btn-clear-key').addEventListener('click', () => {
+  localStorage.removeItem(KEY_STORAGE);
+  state.apiKey = null;
+  document.getElementById('api-key-input').value = '';
+  updateApiUi();
+});
+
+// ============ STAGE NAVIGATION ============
+function setStage(n) {
+  state.currentStage = n;
+  for (let i = 0; i <= 4; i++) {
+    const card = document.getElementById(`stage-${i}`);
+    const ind = document.getElementById(`stage-indicator-${i}`);
+    card.classList.remove('active', 'locked', 'done');
+    ind.classList.remove('active', 'done');
+    if (i < n) { card.classList.add('done'); ind.classList.add('done'); }
+    else if (i === n) { card.classList.add('active'); ind.classList.add('active'); }
+    else { card.classList.add('locked'); }
+  }
+}
+
+// ============ FILE UPLOAD ============
+const dz = document.getElementById('dropzone');
+const fi = document.getElementById('file-input');
+dz.addEventListener('click', () => fi.click());
+['dragenter','dragover'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.add('drag'); }));
+['dragleave','drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.classList.remove('drag'); }));
+dz.addEventListener('drop', e => handleFiles(e.dataTransfer.files));
+fi.addEventListener('change', e => { handleFiles(e.target.files); fi.value = ''; });
+
+async function handleFiles(fileList) {
+  const files = Array.from(fileList).filter(f => f.type.startsWith('image/'));
+  if (files.length === 0) return;
+  files.sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
+  for (const f of files) {
+    const src = await fileToDataUrl(f);
+    state.files.push({
+      id: Date.now() + Math.random(),
+      file: f, src,
+      enhancedUrl: null,
+      status: 'ready',
+    });
+  }
+  renderThumbs();
+  document.getElementById('thumbs-container').classList.remove('hidden');
+}
+function fileToDataUrl(f) {
+  return new Promise(r => {
+    const rd = new FileReader();
+    rd.onload = e => r(e.target.result);
+    rd.readAsDataURL(f);
+  });
+}
+function renderThumbs() {
+  const g = document.getElementById('thumbs-grid');
+  g.innerHTML = '';
+  state.files.forEach((f, i) => {
+    const d = document.createElement('div');
+    d.className = 'thumb';
+    d.innerHTML = `
+      <img src="${f.src}" alt="" />
+      <div class="status">${String(i+1).padStart(2,'0')}</div>
+      <button class="rm" data-id="${f.id}">×</button>
+    `;
+    g.appendChild(d);
+  });
+  g.querySelectorAll('.rm').forEach(btn => btn.addEventListener('click', e => {
+    e.stopPropagation();
+    const id = btn.dataset.id;
+    state.files = state.files.filter(f => String(f.id) !== String(id));
+    renderThumbs();
+    if (state.files.length === 0) document.getElementById('thumbs-container').classList.add('hidden');
+  }));
+}
+document.getElementById('btn-clear').addEventListener('click', () => {
+  if (state.files.length && !confirm('Clear all photos?')) return;
+  state.files = [];
+  renderThumbs();
+  document.getElementById('thumbs-container').classList.add('hidden');
+});
+document.getElementById('btn-add-more').addEventListener('click', () => fi.click());
+
+// ============ START FLOW ============
+document.getElementById('btn-start-flow').addEventListener('click', async () => {
+  if (state.files.length < 1) { alert('Please upload at least 1 photo.'); return; }
+
+  // Choose "best" photo — first one for now (later: the cleanest side shot)
+  state.bestPhotoIdx = 0;
+
+  setStage(1);
+  document.getElementById('stage-1').scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+  if (state.apiKey) {
+    await enhanceAll();
+  } else {
+    // Skip enhancement — use originals
+    state.files.forEach(f => { f.enhancedUrl = f.src; f.status = 'skipped'; });
+    document.getElementById('enhance-working').classList.add('hidden');
+    showEnhancePreview();
+  }
+});
+
+// ============ STAGE 1: ENHANCE (Photoroom) ============
+async function enhanceAll() {
+  document.getElementById('enhance-working').classList.remove('hidden');
+  document.getElementById('enhance-preview').classList.add('hidden');
+
+  const total = state.files.length;
+  let done = 0;
+
+  document.getElementById('enhance-label').textContent = `Photo 0 / ${total}`;
+
+  // Render working-state thumbs
+  const g = document.getElementById('enhance-grid');
+  g.innerHTML = '';
+  state.files.forEach((f, i) => {
+    const d = document.createElement('div');
+    d.className = 'thumb processing';
+    d.id = `ethumb-${f.id}`;
+    d.innerHTML = `
+      <img src="${f.src}" alt="" />
+      <div class="status">${String(i+1).padStart(2,'0')} · waiting</div>
+      <div class="mini-spinner"></div>
+    `;
+    g.appendChild(d);
+  });
+
+  // Process sequentially to be nicer on rate limits
+  for (let i = 0; i < state.files.length; i++) {
+    const f = state.files[i];
+    document.getElementById('enhance-phase').textContent = `Enhancing photo ${i+1} of ${total}`;
+    document.getElementById('enhance-label').textContent = `Photo ${i+1} / ${total}`;
+
+    const thumb = document.getElementById(`ethumb-${f.id}`);
+    thumb.querySelector('.status').textContent = `${String(i+1).padStart(2,'0')} · processing`;
+
+    try {
+      const enhanced = await photoroomRemove(f.file, state.apiKey);
+      // Composite onto showroom backdrop
+      const composed = await composeOnBackdrop(enhanced);
+      f.enhancedUrl = composed;
+      f.status = 'done';
+
+      thumb.classList.remove('processing');
+      thumb.classList.add('done');
+      thumb.querySelector('img').src = composed;
+      thumb.querySelector('.status').textContent = `${String(i+1).padStart(2,'0')} · ✓`;
+      thumb.querySelector('.mini-spinner').remove();
+    } catch (err) {
+      console.error(err);
+      f.enhancedUrl = f.src; // fall back to original
+      f.status = 'error';
+      thumb.classList.remove('processing');
+      thumb.classList.add('error');
+      thumb.querySelector('.status').textContent = `${String(i+1).padStart(2,'0')} · failed`;
+      const sp = thumb.querySelector('.mini-spinner');
+      if (sp) sp.remove();
+    }
+
+    done++;
+    const pct = Math.round((done / total) * 100);
+    document.getElementById('enhance-bar').style.width = pct + '%';
+    document.getElementById('enhance-count').textContent = pct + '%';
+  }
+
+  showEnhancePreview();
+}
+
+function showEnhancePreview() {
+  document.getElementById('enhance-working').classList.add('hidden');
+  document.getElementById('enhance-preview').classList.remove('hidden');
+
+  // Render final thumbs using enhanced URLs
+  const g = document.getElementById('enhance-grid');
+  g.innerHTML = '';
+  state.files.forEach((f, i) => {
+    const d = document.createElement('div');
+    d.className = 'thumb done';
+    d.innerHTML = `
+      <img src="${f.enhancedUrl}" alt="" />
+      <div class="status">${String(i+1).padStart(2,'0')} · ${f.status === 'error' ? 'original' : '✓'}</div>
+    `;
+    g.appendChild(d);
+  });
+}
+
+document.getElementById('btn-skip-enhance').addEventListener('click', () => {
+  state.files.forEach(f => { if (!f.enhancedUrl) { f.enhancedUrl = f.src; f.status = 'skipped'; } });
+  proceedToViewer();
+});
+document.getElementById('btn-continue-to-viewer').addEventListener('click', proceedToViewer);
+
+// Photoroom API wrapper
+async function photoroomRemove(file, key) {
+  const form = new FormData();
+  form.append('image_file', file);
+  form.append('format', 'png');
+  const res = await fetch('https://sdk.photoroom.com/v1/segment', {
+    method: 'POST',
+    headers: { 'x-api-key': key, 'Accept': 'image/png, application/json' },
+    body: form,
+  });
+  if (!res.ok) {
+    let err = '';
+    try { err = (await res.json()).detail || (await res.text()); } catch {}
+    throw new Error(`Photoroom ${res.status}: ${err}`);
+  }
+  const blob = await res.blob();
+  const url = URL.createObjectURL(blob);
+  const img = new Image();
+  await new Promise((r, j) => { img.onload = r; img.onerror = j; img.src = url; });
+  return img;
+}
+
+// Compose the cutout onto a showroom backdrop with shadow
+async function composeOnBackdrop(fgImg) {
+  const w = fgImg.naturalWidth || fgImg.width;
+  const h = fgImg.naturalHeight || fgImg.height;
+  const c = document.createElement('canvas');
+  c.width = w; c.height = h;
+  const ctx = c.getContext('2d');
+
+  // Light Spinny-style studio cyclorama — white fading to light grey floor
+  const bg = ctx.createLinearGradient(0, 0, 0, h);
+  bg.addColorStop(0.00, '#F5F6F8');
+  bg.addColorStop(0.55, '#E9ECF0');
+  bg.addColorStop(0.75, '#D8DDE4');
+  bg.addColorStop(1.00, '#B8C0CC');
+  ctx.fillStyle = bg;
+  ctx.fillRect(0, 0, w, h);
+
+  // Add a subtle ground shadow
+  // Find bottom of subject via a quick alpha scan
+  const tmp = document.createElement('canvas');
+  tmp.width = w; tmp.height = h;
+  tmp.getContext('2d').drawImage(fgImg, 0, 0);
+  const data = tmp.getContext('2d').getImageData(0, 0, w, h).data;
+  let minX = w, maxX = 0, maxY = 0;
+  const step = 6;
+  for (let y = 0; y < h; y += step) {
+    for (let x = 0; x < w; x += step) {
+      if (data[(y*w+x)*4+3] > 30) {
+        if (x < minX) minX = x;
+        if (x > maxX) maxX = x;
+        if (y > maxY) maxY = y;
+      }
+    }
+  }
+  if (maxX > minX) {
+    const cx = (minX + maxX) / 2;
+    const sw = (maxX - minX) * 1.15;
+    const sh = sw * 0.08;
+    const sg = ctx.createRadialGradient(cx, maxY, 0, cx, maxY, sw/2);
+    sg.addColorStop(0, 'rgba(11,18,32,0.45)');
+    sg.addColorStop(0.55, 'rgba(11,18,32,0.15)');
+    sg.addColorStop(1, 'rgba(11,18,32,0)');
+    ctx.save();
+    ctx.translate(cx, maxY);
+    ctx.scale(1, sh / (sw/2));
+    ctx.translate(-cx, -maxY);
+    ctx.fillStyle = sg;
+    ctx.fillRect(minX - sw*0.1, maxY - sh, sw*1.2, sh*2);
+    ctx.restore();
+  }
+
+  // Draw the cutout
+  ctx.drawImage(fgImg, 0, 0);
+
+  return c.toDataURL('image/jpeg', 0.92);
+}
+
+// ============ STAGE 2: 360 VIEWER (Spinny-grade) ============
+let viewerFrame = 0;
+let viewerPlaying = false;
+let viewerRaf = null;
+let viewerPlayStart = 0;
+let viewerStartFrame = 0;
+let viewerHotspotsOn = true;
+let viewerTab = 'ext';
+let viewerPreloaded = false;
+
+function proceedToViewer() {
+  setStage(2);
+  document.getElementById('stage-2').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('viewer-content').classList.remove('hidden');
+
+  // Warn if under-shot
+  const warn = document.getElementById('viewer-frame-warning');
+  const warnText = document.getElementById('viewer-frame-warning-text');
+  if (state.files.length < 16) {
+    warn.classList.remove('hidden');
+    warnText.textContent = ` You uploaded ${state.files.length} photo${state.files.length === 1 ? '' : 's'}. For a premium spin, shoot 24–32 photos walking around the car at even intervals.`;
+  } else if (state.files.length < 24) {
+    warn.classList.remove('hidden');
+    warnText.textContent = ` ${state.files.length} photos works, but 24–32 photos gives the smoothest spin and best buyer experience.`;
+  } else {
+    warn.classList.add('hidden');
+  }
+
+  viewerFrame = 0;
+  renderViewer();
+  renderViewerHotspots(); // empty for now, gets populated after flaw detection
+
+  // Preload all frames
+  if (!viewerPreloaded) preloadFrames();
+
+  // Auto-rotate teaser (3s, one full rotation if possible)
+  if (state.files.length > 1) {
+    setTimeout(() => startViewerPlay(), 400);
+    setTimeout(() => { if (viewerPlaying) stopViewerPlay(); }, 4200);
+  }
+}
+
+function preloadFrames() {
+  const pre = document.getElementById('viewer-preload');
+  const preText = document.getElementById('viewer-preload-text');
+  pre.classList.remove('hidden');
+  let loaded = 0;
+  const total = state.files.length;
+  state.files.forEach(f => {
+    const img = new Image();
+    img.onload = img.onerror = () => {
+      loaded++;
+      preText.textContent = `Loading frames… ${loaded} / ${total}`;
+      if (loaded === total) {
+        viewerPreloaded = true;
+        setTimeout(() => pre.classList.add('hidden'), 300);
+      }
+    };
+    img.src = f.enhancedUrl || f.src;
+  });
+}
+
+function renderViewer() {
+  const total = state.files.length;
+  if (total === 0) return;
+  // Guard: clamp viewerFrame if somehow out of bounds
+  if (viewerFrame >= total) viewerFrame = total - 1;
+  if (viewerFrame < 0) viewerFrame = 0;
+  const f = state.files[viewerFrame];
+  if (!f) return;
+  const img = document.getElementById('viewer-img');
+  const src = f.enhancedUrl || f.src;
+  if (img.src !== src) img.src = src;
+  document.getElementById('viewer-frame-badge').textContent = `Frame ${String(viewerFrame + 1).padStart(2, '0')} / ${String(total).padStart(2, '0')}`;
+
+  // Sync the rotating disc
+  const disc = document.getElementById('viewer-disc');
+  if (disc && total > 1) {
+    const deg = (viewerFrame / total) * 360;
+    // Simulate ellipse rotation by subtle skew
+    disc.style.transform = `translateX(-50%) rotate(${deg * 0.08}deg)`;
+  }
+}
+
+// Render hotspots mapped to frame 0's coords (approximate — they fade as you rotate away)
+function renderViewerHotspots() {
+  const layer = document.getElementById('viewer-hotspots');
+  layer.innerHTML = '';
+  const anns = state.annotations || [];
+  const total = state.files.length;
+
+  anns.forEach((a, i) => {
+    const el = document.createElement('div');
+    el.className = 'vhotspot';
+    el.textContent = i + 1;
+    el.style.left = a.xPct + '%';
+    el.style.top = a.yPct + '%';
+    el.title = a.title;
+    layer.appendChild(el);
+  });
+
+  // Fade hotspots based on how far current frame is from frame 0 (where they were marked)
+  // Simple proxy: full opacity within 25% of frame 0, fade out beyond
+  if (total > 1) {
+    const dist = Math.min(viewerFrame, total - viewerFrame) / total;
+    const opacity = dist < 0.15 ? 1 : dist < 0.3 ? 0.5 : 0;
+    Array.from(layer.children).forEach(el => { el.style.opacity = opacity; });
+  }
+}
+
+// Eased auto-rotate using requestAnimationFrame
+function startViewerPlay() {
+  if (state.files.length < 2) return;
+  viewerPlaying = true;
+  document.getElementById('viewer-play').classList.add('active');
+  document.getElementById('viewer-play').textContent = '❚❚ Pause';
+  viewerPlayStart = performance.now();
+  viewerStartFrame = viewerFrame;
+  const total = state.files.length;
+  const duration = 4000; // 4 seconds for one full rotation
+
+  const tick = (now) => {
+    if (!viewerPlaying) return;
+    const elapsed = now - viewerPlayStart;
+    const t = (elapsed / duration) % 1;
+    // Ease-in-out using cosine curve
+    const eased = t; // keep linear for continuous auto-rotate (ease feels wrong for a loop)
+    const target = (viewerStartFrame + eased * total) % total;
+    const newFrame = Math.floor(target) % total;
+    if (newFrame !== viewerFrame) {
+      viewerFrame = newFrame;
+      renderViewer();
+      renderViewerHotspots();
+    }
+    viewerRaf = requestAnimationFrame(tick);
+  };
+  viewerRaf = requestAnimationFrame(tick);
+}
+
+function stopViewerPlay() {
+  viewerPlaying = false;
+  document.getElementById('viewer-play').classList.remove('active');
+  document.getElementById('viewer-play').textContent = '▶ Auto-rotate';
+  if (viewerRaf) cancelAnimationFrame(viewerRaf);
+}
+
+document.getElementById('viewer-play').addEventListener('click', () => {
+  if (viewerPlaying) stopViewerPlay();
+  else startViewerPlay();
+});
+
+// Hotspot toggle
+document.getElementById('viewer-hotspots-toggle').addEventListener('click', () => {
+  viewerHotspotsOn = !viewerHotspotsOn;
+  const layer = document.getElementById('viewer-hotspots');
+  layer.classList.toggle('hidden-hotspots', !viewerHotspotsOn);
+  const sw = document.querySelector('#viewer-hotspots-toggle .switch');
+  sw.classList.toggle('on', viewerHotspotsOn);
+});
+
+// Tabs
+document.querySelectorAll('.viewer-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    const which = tab.dataset.vtab;
+    viewerTab = which;
+    document.querySelectorAll('.viewer-tab').forEach(t => t.classList.toggle('active', t === tab));
+    const gallery = document.getElementById('viewer-gallery');
+    if (which === 'gal') {
+      renderGallery();
+      gallery.classList.remove('hidden');
+      stopViewerPlay();
+    } else {
+      gallery.classList.add('hidden');
+    }
+  });
+});
+
+function renderGallery() {
+  const g = document.getElementById('viewer-gallery');
+  g.innerHTML = '';
+  state.files.forEach((f, i) => {
+    const item = document.createElement('div');
+    item.className = 'viewer-gallery-item';
+    item.innerHTML = `
+      <img src="${f.enhancedUrl || f.src}" alt="" />
+      <div class="gal-num">${String(i + 1).padStart(2, '0')}</div>
+    `;
+    item.addEventListener('click', () => {
+      viewerFrame = i;
+      renderViewer();
+      renderViewerHotspots();
+      // Switch back to exterior
+      document.querySelectorAll('.viewer-tab').forEach(t => t.classList.toggle('active', t.dataset.vtab === 'ext'));
+      viewerTab = 'ext';
+      g.classList.add('hidden');
+    });
+    g.appendChild(item);
+  });
+}
+
+// Drag to rotate — with smooth interpolation and inertia
+const vstage = document.getElementById('viewer-stage');
+let drag = false;
+let dragStartX = 0;
+let dragStartFrame = 0;
+let dragLastX = 0;
+let dragVelocity = 0;
+let inertiaRaf = null;
+
+const vDown = (x) => {
+  drag = true;
+  dragStartX = x;
+  dragLastX = x;
+  dragStartFrame = viewerFrame;
+  dragVelocity = 0;
+  if (viewerPlaying) stopViewerPlay();
+  if (inertiaRaf) cancelAnimationFrame(inertiaRaf);
+  vstage.classList.add('is-dragging');
+};
+
+const vMove = (x) => {
+  if (!drag || state.files.length < 2) return;
+  const rect = vstage.getBoundingClientRect();
+  const d = (x - dragStartX) / rect.width;
+  // 1.5 full rotations across the full drag width
+  const frameDelta = Math.round(d * state.files.length * 1.5);
+  let nf = (dragStartFrame - frameDelta) % state.files.length;
+  if (nf < 0) nf += state.files.length;
+  if (nf !== viewerFrame) {
+    viewerFrame = nf;
+    renderViewer();
+    renderViewerHotspots();
+  }
+  // Track velocity for inertia
+  dragVelocity = x - dragLastX;
+  dragLastX = x;
+};
+
+const vUp = () => {
+  if (!drag) return;
+  drag = false;
+  vstage.classList.remove('is-dragging');
+
+  // Inertia: if released with velocity, continue spinning briefly with decay
+  if (Math.abs(dragVelocity) > 2 && state.files.length > 1) {
+    applyInertia();
+  }
+};
+
+function applyInertia() {
+  const rect = vstage.getBoundingClientRect();
+  let v = dragVelocity;
+  const step = () => {
+    if (Math.abs(v) < 0.2) { inertiaRaf = null; return; }
+    const d = v / rect.width;
+    const frameDelta = d * state.files.length * 1.5;
+    // Advance by at least one frame or nothing
+    if (Math.abs(frameDelta) >= 1) {
+      const delta = Math.sign(frameDelta) * Math.max(1, Math.round(Math.abs(frameDelta)));
+      let nf = (viewerFrame - delta) % state.files.length;
+      if (nf < 0) nf += state.files.length;
+      viewerFrame = nf;
+      renderViewer();
+      renderViewerHotspots();
+    }
+    v *= 0.92; // friction
+    inertiaRaf = requestAnimationFrame(step);
+  };
+  inertiaRaf = requestAnimationFrame(step);
+}
+
+vstage.addEventListener('mousedown', e => vDown(e.clientX));
+window.addEventListener('mousemove', e => vMove(e.clientX));
+window.addEventListener('mouseup', vUp);
+vstage.addEventListener('touchstart', e => vDown(e.touches[0].clientX), { passive: true });
+window.addEventListener('touchmove', e => vMove(e.touches[0].clientX), { passive: true });
+window.addEventListener('touchend', vUp);
+
+document.getElementById('btn-continue-to-flaws').addEventListener('click', async () => {
+  setStage(3);
+  document.getElementById('stage-3').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  await runFlawDetection();
+});
+
+// ============ STAGE 3: FLAW DETECTION (Claude Vision) ============
+async function runFlawDetection() {
+  document.getElementById('flaw-working').classList.remove('hidden');
+  document.getElementById('flaw-content').classList.add('hidden');
+
+  // Use the ENHANCED version of the best photo for flaw detection
+  const bestPhoto = state.files[state.bestPhotoIdx].enhancedUrl || state.files[state.bestPhotoIdx].src;
+
+  // Set honesty image
+  document.getElementById('honesty-img').src = bestPhoto;
+
+  try {
+    // Convert to base64
+    const base64 = await imgUrlToBase64(bestPhoto);
+
+    const response = await fetch("/api/claude", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1500,
+        messages: [{
+          role: "user",
+          content: [
+            { type: "image", source: { type: "base64", media_type: "image/jpeg", data: base64 } },
+            {
+              type: "text",
+              text: `You are an automotive inspector for Revolv, a platform built on HONEST used-car disclosure. Look at this car photo very carefully. Identify up to 5 visible damage or wear points — scratches, dents, paint chips, curb rash on wheels, worn rubber, faded plastic, rust, cracked lights, etc.
+
+Be truthful. If the car looks clean, return an empty array. Don't invent damage that isn't there. Don't ignore obvious damage.
+
+For each point, give (x, y) coordinates as percentages (0–100) of where on the image the damage is, measured from the top-left corner.
+
+Return ONLY JSON (no markdown, no fences):
+{
+  "points": [
+    {
+      "xPct": 45.2,
+      "yPct": 60.8,
+      "title": "Short title under 40 chars",
+      "severity": "cosmetic | minor | wear | mechanical",
+      "description": "2-3 sentence honest description"
+    }
+  ]
+}`
+            }
+          ]
+        }]
+      }),
+    });
+
+    if (!response.ok) throw new Error(`API ${response.status}`);
+    const data = await response.json();
+    const text = data.content.map(b => b.type === 'text' ? b.text : '').join('');
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+
+    state.annotations = (parsed.points || []).map((p, i) => ({
+      id: i + 1,
+      xPct: Math.max(3, Math.min(97, p.xPct)),
+      yPct: Math.max(3, Math.min(97, p.yPct)),
+      title: p.title || 'Marked point',
+      severity: p.severity || 'cosmetic',
+      description: p.description || '',
+    }));
+  } catch (e) {
+    console.error('Flaw detection failed:', e);
+    state.annotations = [];
+  }
+
+  document.getElementById('flaw-working').classList.add('hidden');
+  document.getElementById('flaw-content').classList.remove('hidden');
+  renderAnnotations();
+}
+
+async function imgUrlToBase64(src) {
+  const res = await fetch(src);
+  const blob = await res.blob();
+  return await new Promise(r => {
+    const rd = new FileReader();
+    rd.onloadend = () => r(rd.result.split(',')[1]);
+    rd.readAsDataURL(blob);
+  });
+}
+
+function renderAnnotations() {
+  // Also refresh the 360 viewer hotspot overlay
+  if (typeof renderViewerHotspots === 'function') {
+    try { renderViewerHotspots(); } catch (e) {}
+  }
+  // Render hotspots on image
+  const stage = document.getElementById('honesty-stage');
+  stage.querySelectorAll('.hotspot').forEach(h => h.remove());
+  state.annotations.forEach((a, i) => {
+    const h = document.createElement('div');
+    h.className = 'hotspot';
+    h.textContent = i + 1;
+    h.style.left = a.xPct + '%';
+    h.style.top = a.yPct + '%';
+    stage.appendChild(h);
+  });
+
+  // Render annotation list
+  const list = document.getElementById('annotations-list');
+  list.innerHTML = '';
+  if (state.annotations.length === 0) {
+    list.innerHTML = '<div style="padding: 20px; text-align: center; color: var(--green); font-weight: 600;">✓ No flaws detected. Clean car!</div>';
+    return;
+  }
+  state.annotations.forEach((a, i) => {
+    const row = document.createElement('div');
+    row.className = 'ann-row';
+    row.innerHTML = `
+      <div class="ann-num">${i+1}</div>
+      <div class="ann-body">
+        <div class="ann-title-row">
+          <input class="ann-title-input" value="${escapeHtml(a.title)}" data-field="title" data-id="${a.id}" />
+          <textarea class="ann-desc" rows="2" data-field="description" data-id="${a.id}">${escapeHtml(a.description)}</textarea>
+        </div>
+        <div class="ann-sev">
+          <select data-field="severity" data-id="${a.id}">
+            <option value="cosmetic"${a.severity==='cosmetic'?' selected':''}>Cosmetic</option>
+            <option value="minor"${a.severity==='minor'?' selected':''}>Minor</option>
+            <option value="wear"${a.severity==='wear'?' selected':''}>Wear</option>
+            <option value="mechanical"${a.severity==='mechanical'?' selected':''}>Mechanical</option>
+          </select>
+          <button class="ann-del" data-del="${a.id}">Remove</button>
+        </div>
+      </div>
+    `;
+    list.appendChild(row);
+  });
+  list.querySelectorAll('[data-field]').forEach(el => {
+    el.addEventListener('input', e => {
+      const id = Number(el.dataset.id);
+      const a = state.annotations.find(x => x.id === id);
+      if (a) a[el.dataset.field] = el.value;
+    });
+  });
+  list.querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', e => {
+      const id = Number(btn.dataset.del);
+      state.annotations = state.annotations.filter(x => x.id !== id);
+      renderAnnotations();
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
+}
+
+// Click to add manual annotation
+document.getElementById('honesty-stage').addEventListener('click', e => {
+  if (e.target.classList.contains('hotspot')) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const xPct = ((e.clientX - rect.left) / rect.width) * 100;
+  const yPct = ((e.clientY - rect.top) / rect.height) * 100;
+  const newId = Math.max(0, ...state.annotations.map(a => a.id)) + 1;
+  state.annotations.push({
+    id: newId, xPct, yPct,
+    title: 'New flaw point',
+    severity: 'cosmetic',
+    description: '',
+  });
+  renderAnnotations();
+});
+
+document.getElementById('btn-rescan').addEventListener('click', runFlawDetection);
+
+document.getElementById('btn-continue-to-listing').addEventListener('click', () => {
+  setStage(4);
+  document.getElementById('stage-4').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('car-form').classList.remove('hidden');
+});
+
+// ============ STAGE 4: LISTING GENERATION ============
+document.getElementById('btn-generate-listing').addEventListener('click', async () => {
+  // Gather car details
+  state.carDetails = {
+    make: document.getElementById('fld-make').value,
+    model: document.getElementById('fld-model').value,
+    year: document.getElementById('fld-year').value,
+    km: document.getElementById('fld-km').value,
+    fuel: document.getElementById('fld-fuel').value,
+    transmission: document.getElementById('fld-trans').value,
+    currency: document.getElementById('fld-currency').value,
+    price: document.getElementById('fld-price').value,
+    location: document.getElementById('fld-location').value,
+    target: document.getElementById('fld-target').value,
+  };
+
+  document.getElementById('car-form').classList.add('hidden');
+  document.getElementById('listing-working').classList.remove('hidden');
+
+  try {
+    const [en, hi, ar] = await Promise.all([
+      generateListing('en'),
+      generateListing('hi'),
+      generateListing('ar'),
+    ]);
+    state.generated = { en, hi, ar };
+    showListingOutput();
+  } catch (e) {
+    console.error('Generation failed:', e);
+    alert('Listing generation failed: ' + e.message);
+    document.getElementById('listing-working').classList.add('hidden');
+    document.getElementById('car-form').classList.remove('hidden');
+  }
+});
+
+async function generateListing(lang) {
+  const d = state.carDetails;
+  const langMap = {
+    en: 'Write all outputs in natural, fluent English.',
+    hi: 'Write all outputs in natural, fluent Hindi (Devanagari script). Keep technical car terms in English where that reads naturally.',
+    ar: 'Write all outputs in natural, fluent Modern Standard Arabic. Keep technical car terms in English where that reads naturally.',
+  };
+  const targetMap = {
+    export: 'This car is being sold to an EXPORT buyer (Nigeria, Kenya, Iraq, etc.). Emphasize export-readiness, remote inspection confidence, shipping-friendliness.',
+    local: 'Local UAE buyer. Emphasize GCC specs, service history, warranty transferability.',
+    india: 'India buyer. Emphasize fuel efficiency, service network, resale value, Indian road suitability.',
+    family: 'Family buyer. Emphasize safety, space, comfort, reliability.',
+  };
+  const flawsSummary = state.annotations.length === 0
+    ? 'This car has been inspected and NO flaws were detected — highlight this as "clean condition verified".'
+    : `This car has ${state.annotations.length} disclosed flaws: ${state.annotations.map(a => `${a.title} (${a.severity})`).join(', ')}. Be honest about condition.`;
+
+  const prompt = `You are a senior automotive listing copywriter for Revolv — an honest 3D used car platform. Write a compelling truthful listing.
+
+${langMap[lang]}
+
+CAR:
+- ${d.year} ${d.make} ${d.model}
+- ${Number(d.km).toLocaleString()} km, ${d.fuel}, ${d.transmission}
+- Price: ${d.currency} ${Number(d.price).toLocaleString()}
+- Location: ${d.location}
+
+TARGET BUYER:
+${targetMap[d.target]}
+
+CONDITION:
+${flawsSummary}
+
+TONE: Premium but honest. Confident, never hype. Revolv's brand is "honestly seen" — don't overclaim. Avoid cliches like "must see", "one-of-a-kind". Sound like an editor.
+
+Return ONLY JSON (no markdown, no fences) in this exact structure:
+{
+  "title": "60-80 char listing title with year, make, model, one standout feature",
+  "description": "120-180 word marketing description in 2-3 short paragraphs",
+  "highlights": ["5-7 concrete highlights, each 6-12 words"],
+  "whatsapp": "80-120 word ready-to-send WhatsApp pitch from dealer to buyer, with line breaks for WhatsApp readability",
+  "tags": ["10-12 lowercase SEO tags"]
+}`;
+
+  const res = await fetch("/api/claude", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 2000,
+      messages: [{ role: "user", content: prompt }],
+    }),
+  });
+  if (!res.ok) throw new Error(`Claude API ${res.status}`);
+  const data = await res.json();
+  const text = data.content.map(b => b.type === 'text' ? b.text : '').join('');
+  return JSON.parse(text.replace(/```json|```/g, '').trim());
+}
+
+function showListingOutput() {
+  document.getElementById('listing-working').classList.add('hidden');
+  document.getElementById('listing-output').classList.remove('hidden');
+  setStage(4); // keep on 4, but mark all done
+  // actually mark stage-4 as done
+  document.getElementById('stage-4').classList.add('done');
+  document.getElementById('stage-4').classList.remove('active');
+  document.getElementById('stage-indicator-4').classList.add('done');
+
+  renderGenerated('en');
+
+  // Final listing mock
+  document.getElementById('final-photo').src = state.files[0].enhancedUrl || state.files[0].src;
+  document.getElementById('final-count').textContent = state.files.length;
+  document.getElementById('final-flaws').textContent = state.annotations.length;
+
+  // Grade calc
+  const weights = state.annotations.reduce((s, a) => s + ({cosmetic:1,minor:2,wear:2,mechanical:5}[a.severity] || 1), 0);
+  let grade = 'A+';
+  if (weights > 0 && weights <= 2) grade = 'A';
+  else if (weights <= 5) grade = 'A−';
+  else if (weights <= 10) grade = 'B+';
+  else if (weights <= 15) grade = 'B';
+  else if (weights > 15) grade = 'C';
+  document.getElementById('final-grade').textContent = `${grade} Grade`;
+}
+
+function renderGenerated(lang) {
+  state.currentLang = lang;
+  const g = state.generated[lang];
+  if (!g) return;
+  const dir = lang === 'ar' ? 'rtl' : 'ltr';
+
+  document.querySelectorAll('.lang-tab').forEach(t => t.classList.toggle('active', t.dataset.lang === lang));
+
+  document.getElementById('out-title').textContent = g.title;
+  document.getElementById('out-title').setAttribute('dir', dir);
+  document.getElementById('out-description').textContent = g.description;
+  document.getElementById('out-description').setAttribute('dir', dir);
+  document.getElementById('out-whatsapp').textContent = g.whatsapp;
+  document.getElementById('out-whatsapp').setAttribute('dir', dir);
+
+  const hl = document.getElementById('out-highlights');
+  hl.innerHTML = '';
+  hl.setAttribute('dir', dir);
+  g.highlights.forEach(h => {
+    const li = document.createElement('li');
+    li.textContent = h;
+    hl.appendChild(li);
+  });
+
+  const tagsEl = document.getElementById('out-tags');
+  tagsEl.innerHTML = '';
+  g.tags.forEach(t => {
+    const s = document.createElement('span');
+    s.className = 'tag';
+    s.textContent = t;
+    tagsEl.appendChild(s);
+  });
+
+  // Final mock preview (always English for the mock title + price format)
+  const d = state.carDetails;
+  document.getElementById('final-title').textContent = `${d.year} ${d.make} ${d.model}`;
+  document.getElementById('final-specs').textContent = `${Number(d.km).toLocaleString()} km · ${d.fuel} · ${d.location}`;
+  document.getElementById('final-price').textContent = `${d.currency} ${Number(d.price).toLocaleString()}`;
+}
+
+document.querySelectorAll('.lang-tab').forEach(t => t.addEventListener('click', () => renderGenerated(t.dataset.lang)));
+
+// Copy buttons
+document.querySelectorAll('.copy-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const g = state.generated[state.currentLang];
+    if (!g) return;
+    let text = '';
+    switch(btn.dataset.copy) {
+      case 'title': text = g.title; break;
+      case 'description': text = g.description; break;
+      case 'highlights': text = g.highlights.map(h => '• ' + h).join('\n'); break;
+      case 'whatsapp': text = g.whatsapp; break;
+      case 'tags': text = g.tags.join(', '); break;
+    }
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = '✓ Copied';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = orig; btn.classList.remove('copied'); }, 1500);
+    });
+  });
+});
+
+// ============ EXPORT ============
+document.getElementById('btn-export-wa').addEventListener('click', () => {
+  const g = state.generated[state.currentLang];
+  if (!g) return;
+  navigator.clipboard.writeText(g.whatsapp).then(() => {
+    const tile = document.getElementById('btn-export-wa');
+    const orig = tile.querySelector('h4').textContent;
+    tile.querySelector('h4').textContent = '✓ Copied to clipboard';
+    setTimeout(() => { tile.querySelector('h4').textContent = orig; }, 2000);
+  });
+});
+
+document.getElementById('btn-export-html').addEventListener('click', () => {
+  const html = buildStandaloneListing();
+  const blob = new Blob([html], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  const d = state.carDetails;
+  const slug = `${d.year}-${d.make}-${d.model}`.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+  a.href = url;
+  a.download = `revolv-${slug}.html`;
+  a.click();
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('btn-start-over').addEventListener('click', () => {
+  if (!confirm('Clear everything and start a new car?')) return;
+  location.reload();
+});
+
+function buildStandaloneListing() {
+  const g = state.generated.en;
+  const d = state.carDetails;
+  const photos = state.files.map(f => f.enhancedUrl || f.src);
+  const anns = state.annotations;
+
+  return `<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>${escapeHtml(g.title)} · Revolv</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #F6F8FB; --alt: #FFF; --ink: #0B1220; --body: #2A3342; --mute: #6B7280;
+    --line: #E4E9F0; --blue: #1E5AF5; --orange: #FF6A1A; --green: #10B981;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); font-family: 'Plus Jakarta Sans', sans-serif; color: var(--body); line-height: 1.5; }
+  nav { padding: 16px 24px; background: var(--alt); border-bottom: 1px solid var(--line); }
+  .brand { display: inline-flex; align-items: center; gap: 10px; font-weight: 800; color: var(--ink); font-size: 18px; }
+  .brand-logo { width: 30px; height: 30px; border-radius: 7px; background: linear-gradient(135deg, var(--blue), var(--orange)); color: white; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 40px 24px; }
+  h1 { font-size: 36px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1.1; }
+  .specs { font-size: 14px; color: var(--mute); margin-bottom: 24px; }
+  .grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 24px; }
+  @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  .viewer { aspect-ratio: 4/3; background: radial-gradient(ellipse at center, #1f2937, #0F172A); border-radius: 16px; overflow: hidden; position: relative; user-select: none; cursor: grab; }
+  .viewer img { width: 100%; height: 100%; object-fit: contain; pointer-events: none; -webkit-user-drag: none; }
+  .frame-badge { position: absolute; bottom: 12px; left: 12px; background: rgba(0,0,0,0.6); color: white; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-family: monospace; }
+  .aside { background: var(--alt); border-radius: 16px; padding: 24px; }
+  .price { font-size: 32px; font-weight: 800; color: var(--ink); letter-spacing: -0.02em; margin-bottom: 4px; }
+  .grade { display: inline-block; background: #DEFAF0; color: #047857; padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 700; margin-bottom: 20px; }
+  .cta { display: block; background: var(--orange); color: white; text-align: center; padding: 14px; border-radius: 10px; font-weight: 700; text-decoration: none; margin-top: 20px; }
+  h2 { font-size: 22px; font-weight: 700; color: var(--ink); letter-spacing: -0.02em; margin: 32px 0 12px; }
+  .desc { background: var(--alt); padding: 20px; border-radius: 14px; white-space: pre-line; color: var(--body); line-height: 1.6; }
+  .hl { background: var(--alt); padding: 20px; border-radius: 14px; }
+  .hl ul { list-style: none; padding: 0; }
+  .hl li { padding: 8px 0; border-bottom: 1px solid var(--line); display: flex; gap: 10px; }
+  .hl li:last-child { border: 0; }
+  .hl li::before { content: '→'; color: var(--orange); font-weight: 700; }
+  .flaws-card { background: var(--alt); padding: 20px; border-radius: 14px; border-left: 3px solid var(--orange); }
+  .flaw-item { padding: 12px 0; border-bottom: 1px solid var(--line); display: flex; gap: 12px; }
+  .flaw-item:last-child { border: 0; }
+  .flaw-num { width: 28px; height: 28px; border-radius: 50%; background: var(--orange); color: white; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 12px; flex-shrink: 0; font-family: monospace; }
+  .flaw-title { font-weight: 600; color: var(--ink); font-size: 14.5px; }
+  .flaw-sev { display: inline-block; font-size: 10px; padding: 2px 8px; border-radius: 4px; background: #FFEFE5; color: var(--orange); text-transform: uppercase; font-weight: 700; margin-left: 8px; font-family: monospace; letter-spacing: 0.05em; }
+  .flaw-desc { font-size: 13px; color: var(--body); margin-top: 4px; }
+  .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tags span { background: var(--alt); border: 1px solid var(--line); padding: 4px 10px; border-radius: 6px; font-size: 12px; font-family: monospace; color: var(--body); }
+  footer { padding: 32px 24px; border-top: 1px solid var(--line); color: var(--mute); font-size: 13px; text-align: center; }
+</style></head>
+<body>
+<nav>
+  <div class="brand"><div class="brand-logo">R</div>Revolv</div>
+</nav>
+<div class="wrap">
+  <h1>${escapeHtml(g.title)}</h1>
+  <div class="specs">${d.year} · ${Number(d.km).toLocaleString()} km · ${d.fuel} · ${d.transmission} · ${d.location}</div>
+
+  <div class="grid">
+    <div>
+      <div class="viewer" id="viewer"><img id="vimg" src="${photos[0]}"/><div class="frame-badge" id="vbadge">Frame 1 / ${photos.length}</div></div>
+    </div>
+    <div class="aside">
+      <div class="price">${d.currency} ${Number(d.price).toLocaleString()}</div>
+      <div class="grade">${document.getElementById('final-grade').textContent} · Honestly seen ✓</div>
+      <div style="font-size: 13px; color: var(--mute); margin-bottom: 20px;">
+        ${state.files.length} photos · ${state.annotations.length} flaw${state.annotations.length === 1 ? '' : 's'} disclosed · 360° drag to rotate
+      </div>
+      <a href="#" class="cta" id="wa-cta">💬 Contact on WhatsApp</a>
+    </div>
+  </div>
+
+  <h2>About this car</h2>
+  <div class="desc">${escapeHtml(g.description)}</div>
+
+  <h2>Highlights</h2>
+  <div class="hl"><ul>${g.highlights.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul></div>
+
+  ${anns.length > 0 ? `
+    <h2>Honesty Report</h2>
+    <div class="flaws-card">
+      <p style="margin-bottom: 14px; color: var(--mute); font-size: 14px;">Every flaw on this car is documented upfront. What you see is what you get.</p>
+      ${anns.map((a, i) => `
+        <div class="flaw-item">
+          <div class="flaw-num">${i+1}</div>
+          <div>
+            <div class="flaw-title">${escapeHtml(a.title)}<span class="flaw-sev">${escapeHtml(a.severity)}</span></div>
+            <div class="flaw-desc">${escapeHtml(a.description)}</div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  ` : `
+    <h2>Honesty Report</h2>
+    <div class="flaws-card" style="border-left-color: var(--green);">
+      <p style="color: var(--green); font-weight: 600;">✓ No flaws detected. Clean car, inspection-verified.</p>
+    </div>
+  `}
+
+  <h2>Tags</h2>
+  <div class="tags">${g.tags.map(t => `<span>${escapeHtml(t)}</span>`).join('')}</div>
+</div>
+<footer>© Revolv · Honestly seen · This listing is self-contained and works offline</footer>
+<script>
+const frames = ${JSON.stringify(photos)};
+let cur = 0, playing = false, timer = null;
+const img = document.getElementById('vimg'), badge = document.getElementById('vbadge'), stage = document.getElementById('viewer');
+function render() { img.src = frames[cur]; badge.textContent = 'Frame ' + (cur+1) + ' / ' + frames.length; }
+stage.onclick = () => { if (playing) { clearInterval(timer); playing = false; } else { timer = setInterval(() => { cur = (cur+1) % frames.length; render(); }, 80); playing = true; } };
+let drag=false, sx=0, sf=0;
+const down = x => { drag=true; sx=x; sf=cur; if(playing){clearInterval(timer);playing=false;} };
+const move = x => { if(!drag||frames.length<2)return; const r=stage.getBoundingClientRect(); const d=(x-sx)/r.width; const fd=Math.round(d*frames.length*1.5); let n=(sf-fd)%frames.length; if(n<0)n+=frames.length; if(n!==cur){cur=n;render();} };
+const up = () => drag = false;
+stage.addEventListener('mousedown', e => down(e.clientX));
+window.addEventListener('mousemove', e => move(e.clientX));
+window.addEventListener('mouseup', up);
+stage.addEventListener('touchstart', e => down(e.touches[0].clientX), {passive:true});
+window.addEventListener('touchmove', e => move(e.touches[0].clientX), {passive:true});
+window.addEventListener('touchend', up);
+setTimeout(() => { if (!playing && !drag) stage.click(); setTimeout(() => { if (playing) stage.click(); }, 3000); }, 500);
+document.getElementById('wa-cta').addEventListener('click', e => {
+  e.preventDefault();
+  const msg = ${JSON.stringify(g.whatsapp)};
+  window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank');
+});
+<\/script>
+</body></html>`;
+}
+
+// ============ INIT ============
+loadApiKey();
+setStage(0);
+</script>
+</body>
+</html>
